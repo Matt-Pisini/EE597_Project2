@@ -53,5 +53,50 @@ int main(int argc, char *argv[]){
     NetDeviceContainer txDevices;
     txDevices = wifi.Install(phy, mac, wifiTxNodes);
 
+    //Set up backoff window
+    Ptr<NetDevice> dev = wifiRxNode.Get (0) -> GetDevice (0);
+    Ptr<WifiNetDevice> wifi_dev = DynamicCast<WifiNetDevice> (dev);
+    Ptr<WifiMac> wifi_mac = wifi_dev->GetMac ();
+    PointerValue ptr;
+    Ptr<Txop> dca;
+    wifi_mac->GetAttribute ("Txop", ptr);
+    dca = ptr.Get<Txop> ();
+    dca-> SetMinCw(minCw);
+    dca-> SetMaxCw(maxCw);
+
+    //set up mobility and position
+    MobilityHelper mobility;
+    mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
+    Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
+    positionAlloc->Add (Vector (0.0, 0.0, 0.0));
+    float rho = 1;
+    float pi = 3.14159265;
+    for (uint32_t i=0;i<nWifi;i++){
+        double theta = i*2*pi/nWifi;
+        positionAlloc->Add (Vector (rho*cos(theta), rho*sin(theta), 0.0));
+    }
+    mobility.SetPositionAllocator (positionAlloc);
+    mobility.Install (wifiRxNode);
+    mobility.Install (wifiTxNodes);
+
+
+    //Install network stack on nodes
+    InternetStackHelper stack;
+    stack.Install(your nodes);
+
+    //Configure IP addresses and internet interfaces:
+    Ipv4AddressHelper address;
+    Address.setBase(…);
+    Ipv4InterfaceContainer wifiInterfaces;
+    wifiInterface = address.Assign (your devices);
+
+    // Build your applications and monitor throughtput:
+    UdpServerHelper server(…);
+    OnOffHelper client (…);
+    UdpClientHelper client(…);
+    ApplicationContainer serverApp = server.Install(your nodes);
+    uint64_t totalPacketsThroughAP = DynamicCast<UdpServer> (serverApp.Get (0))->GetReceived ();
+
+
 
 }
