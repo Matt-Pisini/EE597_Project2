@@ -28,16 +28,20 @@ int main(int argc, char *argv[]){
     NodeContainer wifiTxNodes;
     wifiTxNodes.Create(N);
 
-
+    //matt
     //Setup wifi channel
+    //Do we need to set propagation delay? Might be according to the 
+    //research paper as well.
     YansWifiChannelHelper channel = YansWifiChannelHelper::Default();
     channel.SetPropagationDelay("ns3::ConstantSpeedPropagationDelayModel",
                                 "Speed", StringValue("1000000"));
     YansWifiPhyHelper phy = YansWifiPhyHelper::Default();
     phy.SetChannel(channel.Create());
 
-
+    //matt
     //Setup wifi Module
+    //Need to look into wifi-mac.cc or wifi-phy.cc for configuration
+    //parameters to change according to research paper.
     WifiHelper wifi;
     wifi.SetStandard(WIFI_PHY_STANDARD_80211b);
     wifi.SetRemoteStationManager("ns3::ConstantRateWifiMangager",
@@ -53,6 +57,7 @@ int main(int argc, char *argv[]){
     NetDeviceContainer txDevices;
     txDevices = wifi.Install(phy, mac, wifiTxNodes);
 
+    //will
     //Set up backoff window
     Ptr<NetDevice> dev = wifiRxNode.Get (0) -> GetDevice (0);
     Ptr<WifiNetDevice> wifi_dev = DynamicCast<WifiNetDevice> (dev);
@@ -64,6 +69,7 @@ int main(int argc, char *argv[]){
     dca-> SetMinCw(minCw);
     dca-> SetMaxCw(maxCw);
 
+    //will
     //set up mobility and position
     MobilityHelper mobility;
     mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
@@ -79,17 +85,19 @@ int main(int argc, char *argv[]){
     mobility.Install (wifiRxNode);
     mobility.Install (wifiTxNodes);
 
-
+    //matt || will
     //Install network stack on nodes
     InternetStackHelper stack;
     stack.Install(your nodes);
 
+    //matt || will
     //Configure IP addresses and internet interfaces:
     Ipv4AddressHelper address;
     Address.setBase(…);
     Ipv4InterfaceContainer wifiInterfaces;
     wifiInterface = address.Assign (your devices);
 
+    //matt + will
     // Build your applications and monitor throughtput:
     UdpServerHelper server(…);
     OnOffHelper client (…);
@@ -97,6 +105,8 @@ int main(int argc, char *argv[]){
     ApplicationContainer serverApp = server.Install(your nodes);
     uint64_t totalPacketsThroughAP = DynamicCast<UdpServer> (serverApp.Get (0))->GetReceived ();
 
-    //testing my git
-
+    //run simulation
+    Simulator::Run ();
+    Simulator::Destroy ();
+    return 0;
 }
