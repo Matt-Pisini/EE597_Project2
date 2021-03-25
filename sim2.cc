@@ -161,13 +161,15 @@ int main(int argc, char *argv[]){
 
     flowMonitor->SerializeToXmlFile("NameOfFile.xml", true, true);
 
-    std::cout << totalPacketsThroughAP<< std::endl;
 
     //Set total simulation time
     clientApp.Start( Seconds(1.0) ); //arranges for all applications in this container (i.e. all nodes) to start at specified time
     clientApp.Stop( Seconds(END_SIMULATION) ); //arranges for all applications in this container (i.e. all nodes) to stop at specified time. Need to play around with this.
     serverApp.Start( Seconds(0.0) );
     serverApp.Stop( Seconds(END_SIMULATION) );
+
+
+    std::cout << totalPacketsThroughAP<< std::endl;
 
     //run simulation
     Simulator::Stop (Seconds (END_SIMULATION));
