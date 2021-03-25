@@ -13,6 +13,7 @@
 #include "ns3/mobility-module.h"
 #include "ns3/ipv4-interface-container.h"
 #include "ns3/on-off-helper.h"
+#include "ns3/wifi-module.h"
 
 /* NEED TO DO:
 - Write a function that calculates throughput 
