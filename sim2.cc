@@ -11,7 +11,8 @@
 #include "ns3/txop.h"
 #include "ns3/wifi-net-device.h"
 #include "ns3/mobility-module.h"
-
+#include "ns3/ipv4-interface-container.h"
+#include "ns3/on-off-helper.h"
 
 /* NEED TO DO:
 - Write a function that calculates throughput 
@@ -28,11 +29,15 @@ NS_LOG_COMPONENT_DEFINE ("Sim2ScenarioA");
 
 int main(int argc, char *argv[]){
     //Reading command line arguments
-    int N = 3;          //Number of nodes in network
-    uint64_t DATE_RATE = 1;      //data rate (Mbits/s)
+    uint32_t N = 3;          //Number of nodes in network
+    uint64_t DATA_RATE = 1;      //data rate (Mbits/s)
+    uint32_t minCw = 1;
+    uint32_t maxCw = 1;
     CommandLine cmd (__FILE__);
     cmd.AddValue("N", "Number of Tx Nodes/Devices", N);
     cmd.AddValue("DATA_RATE", "Data Rate in Mbits/s", DATA_RATE);
+    cmd.AddValue("minCw", "Minimum contention window size", minCw);
+    cmd.AddValue("maxCw", "Maximum contention window size", maxCw);
     cmd.Parse(argc, argv);
 
 
@@ -114,11 +119,11 @@ int main(int argc, char *argv[]){
     Helper class that is a simple IPv4 address generator.
     ***********************************/
     Ipv4AddressHelper address;
-    address.setBase("10.0.0.0","255.255.255.0"); //sets the base network IP and mask in which we allocate IP addresses to nodes
+    address.SetBase("10.0.0.0","255.255.255.0"); //sets the base network IP and mask in which we allocate IP addresses to nodes
 
     Ipv4InterfaceContainer wifiInterfaces; //this object is a list of (Ptr<ipv4>,interface_index) pairs for all NetDevices
     wifiInterface = address.Assign(txDevices); //assign function allocates IP addresses to all the nodes in the NetDeviceContainer vector
-    address.setBase("10.0.1.0","255.255.255.0"); //sets the base network IP and mask in which we allocate IP addresses to nodes
+    address.SetBase("10.0.1.0","255.255.255.0"); //sets the base network IP and mask in which we allocate IP addresses to nodes
     address.Assign(rxDevice); //Not sure if I can just assign this without storing it in Ipv4InterfaceContainer vector... How/why is this vector used?
 
 
@@ -131,7 +136,7 @@ int main(int argc, char *argv[]){
     OnOffHelper client ("UdpSocketFactory","10.0.1.0"); //makes it easier to work with OnOffApplications. UdpSocketFactory is API to create UDP socket instances sending to addr specified.
     UdpClientHelper client("10.0.1.0",udp_server_port); //address of remote UDP server
     ApplicationContainer clientApp = client.Install(wifiTxNodes); //install OnOffApplication on each node of input as specified by OnOffHelper. Holds vector of Application pointers. 
-    client.SetConstantRate(DATE_RATE*8*1000000, uint32_t 512); //use OnOffHelper to set data rate (global variable we set) and packet size (which is default 512)
+    client.SetConstantRate(DATA_RATE*8*1000000, uint32_t 512); //use OnOffHelper to set data rate (global variable we set) and packet size (which is default 512)
     uint64_t totalPacketsThroughAP = DynamicCast<UdpServer> (serverApp.Get (0))->GetReceived ();
     uint64_t totalPacketsSent = 0;
     for( int i = 0; i < N; i++)
