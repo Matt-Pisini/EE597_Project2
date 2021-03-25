@@ -16,7 +16,8 @@ NS_LOG_COMPONENT_DEFINE ("Sim2ScenarioA");
 
 int main(int argc, char *argv[]){
     //Reading command line arguments
-    int N = 3;
+    int N = 3;          //Number of nodes in network
+    int DATE_RATE;      //data rate (Mbits/s)
     CommandLine cmd (__FILE__);
     cmd.AddValue("N", "Number of Tx Nodes/Devices", N);
     cmd.Parse(argc, argv);
@@ -112,14 +113,18 @@ int main(int argc, char *argv[]){
     //UdpServerHelper and UdpClientHelper are meant to help facilitate client-server communication for UDP
     uint16_t udp_server_port = 7000; //port that the server will listen on
     UdpServerHelper server(udp_server_port); //we need to add the port that the server will listen on for incoming packets
-    OnOffHelper client ("UdpSocketFactory","10.0.1.0"); //makes it easier to work with OnOffApplications. UdpSocketFactory is API to create USP socket instances.
-    UdpClientHelper client("10.0.1.0",udp_server_port); //address of remote UDP server
     ApplicationContainer serverApp = server.Install(wifiRxNode); //holds vector of Application pointers. Install() creates one UDP application on each of input nodes from NodeContainer.
-    ApplicationContainer clientApp = client.Install(wifiTxNodes); //holds vector of Application pointers. 
+
+    OnOffHelper client ("UdpSocketFactory","10.0.1.0"); //makes it easier to work with OnOffApplications. UdpSocketFactory is API to create UDP socket instances sending to addr specified.
+    UdpClientHelper client("10.0.1.0",udp_server_port); //address of remote UDP server
+    ApplicationContainer clientApp = client.Install(wifiTxNodes); //install OnOffApplication on each node of input as specified by OnOffHelper. Holds vector of Application pointers. 
+    client.SetConstantRate(DATE_RATE, uint32_t 512); //use OnOffHelper to set data rate (global variable we set) and packet size (which is default 512)
     uint64_t totalPacketsThroughAP = DynamicCast<UdpServer> (serverApp.Get (0))->GetReceived ();
+    clientApp.Start( Seconds(0.0) ); //arranges for all applications in this container (i.e. all nodes) to start at specified time
+    clientApp.Stop( Seconds(20.0) ); //arranges for all applications in this container (i.e. all nodes) to stop at specified time. Need to play around with this.
 
     //run simulation
-    Simulator::Run ();
+    Simulator::Run();
     Simulator::Destroy ();
     return 0;
 }
