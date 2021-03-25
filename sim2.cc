@@ -51,7 +51,7 @@ int main(int argc, char *argv[]){
     mac.SetType("ns3::AdhocWifiMac", "Ssid", SsidValue(ssid));
 
 
-    //Install NetDevices
+    //Install NetDevices (i.e. abstraction for NIC to work with channel)
     NetDeviceContainer rxDevice;
     rxDevice = wifi.Install(phy, mac, wifiRxNode);
     NetDeviceContainer txDevices;
@@ -85,24 +85,37 @@ int main(int argc, char *argv[]){
     mobility.Install (wifiRxNode);
     mobility.Install (wifiTxNodes);
 
-    //matt || will
     //Install network stack on nodes
+    /*********** EXPLANATION ***********
+    We use this function to aggregate other objects for IP/TCP/UDP functionality to our existing nodes. 
+    This includes protocols like ARP, IPv4, neighbor discovery, and more. Essentially our nodes are basic
+    until we add all this internet related functionality to them.
+    ***********************************/
     InternetStackHelper stack;
-    stack.Install(your nodes);
+    stack.Install(wifiRxNode);
+    stack.Install(wifiTxNodes);
 
-    //matt || will
     //Configure IP addresses and internet interfaces:
+    /*********** EXPLANATION ***********
+    Helper class that is a simple IPv4 address generator.
+    ***********************************/
     Ipv4AddressHelper address;
-    Address.setBase(…);
-    Ipv4InterfaceContainer wifiInterfaces;
-    wifiInterface = address.Assign (your devices);
+    address.setBase("10.0.0.0","255.255.255.0"); //sets the base network IP and mask in which we allocate IP addresses to nodes
 
-    //matt + will
+    Ipv4InterfaceContainer wifiInterfaces; //this object is a list of (Ptr>ipv4>,interface_index) pairs for all NetDevices
+    wifiInterface = address.Assign(txDevices); //assign function allocates IP addresses to all the nodes in the NetDeviceContainer vector
+    address.setBase("10.0.1.0","255.255.255.0"); //sets the base network IP and mask in which we allocate IP addresses to nodes
+    address.Assign(rxDevice); //Not sure if I can just assign this without storing it in Ipv4InterfaceContainer vector... How/why is this vector used?
+
+
     // Build your applications and monitor throughtput:
-    UdpServerHelper server(…);
-    OnOffHelper client (…);
-    UdpClientHelper client(…);
-    ApplicationContainer serverApp = server.Install(your nodes);
+    //UdpServerHelper and UdpClientHelper are meant to help facilitate client-server communication for UDP
+    uint16_t udp_server_port = 7000; //port that the server will listen on
+    UdpServerHelper server(udp_server_port); //we need to add the port that the server will listen on for incoming packets
+    OnOffHelper client ("UdpSocketFactory","10.0.1.0"); //makes it easier to work with OnOffApplications. UdpSocketFactory is API to create USP socket instances.
+    UdpClientHelper client("10.0.1.0",udp_server_port); //address of remote UDP server
+    ApplicationContainer serverApp = server.Install(wifiRxNode); //holds vector of Application pointers. Install() creates one UDP application on each of input nodes from NodeContainer.
+    ApplicationContainer clientApp = client.Install(wifiTxNodes); //holds vector of Application pointers. 
     uint64_t totalPacketsThroughAP = DynamicCast<UdpServer> (serverApp.Get (0))->GetReceived ();
 
     //run simulation
