@@ -43,9 +43,6 @@ int main(int argc, char *argv[]){
     cmd.AddValue("maxCw", "Maximum contention window size", maxCw);
     cmd.Parse(argc, argv);
 
-
-LogComponentEnable("UdpEchoClientApplication", LOG_LEVEL_INFO);
-    LogComponentEnable("UdpEchoServerApplication", LOG_LEVEL_INFO);
     //Creating nodes for Tx and Rx
     NodeContainer wifiRxNode;
     wifiRxNode.Create(1);
@@ -125,13 +122,11 @@ LogComponentEnable("UdpEchoClientApplication", LOG_LEVEL_INFO);
     ***********************************/
     Ipv4AddressHelper address;
     address.SetBase("10.0.0.0","255.255.255.0"); //sets the base network IP and mask in which we allocate IP addresses to nodes
+    Ipv4InterfaceContainer wifiRxInterface;
+    wifiRxInterface = address.Assign(rxDevice); //Not sure if I can just assign this without storing it in Ipv4InterfaceContainer vector... How/why is this vector used?
 
     Ipv4InterfaceContainer wifiInterfaces; //this object is a list of (Ptr<ipv4>,interface_index) pairs for all NetDevices
     wifiInterfaces = address.Assign(txDevices); //assign function allocates IP addresses to all the nodes in the NetDeviceContainer vector
-    Ipv4InterfaceContainer wifiRxInterface;
-    address.SetBase("10.0.1.0","255.255.255.0"); //sets the base network IP and mask in which we allocate IP addresses to nodes
-    wifiRxInterface = address.Assign(rxDevice); //Not sure if I can just assign this without storing it in Ipv4InterfaceContainer vector... How/why is this vector used?
-
 
     // Build your applications and monitor throughtput:
     //UdpServerHelper and UdpClientHelper are meant to help facilitate client-server communication for UDP
