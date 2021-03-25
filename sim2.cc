@@ -122,7 +122,7 @@ int main(int argc, char *argv[]){
     address.SetBase("10.0.0.0","255.255.255.0"); //sets the base network IP and mask in which we allocate IP addresses to nodes
 
     Ipv4InterfaceContainer wifiInterfaces; //this object is a list of (Ptr<ipv4>,interface_index) pairs for all NetDevices
-    wifiInterface = address.Assign(txDevices); //assign function allocates IP addresses to all the nodes in the NetDeviceContainer vector
+    wifiInterfaces = address.Assign(txDevices); //assign function allocates IP addresses to all the nodes in the NetDeviceContainer vector
     address.SetBase("10.0.1.0","255.255.255.0"); //sets the base network IP and mask in which we allocate IP addresses to nodes
     address.Assign(rxDevice); //Not sure if I can just assign this without storing it in Ipv4InterfaceContainer vector... How/why is this vector used?
 
@@ -133,7 +133,7 @@ int main(int argc, char *argv[]){
     UdpServerHelper server(udp_server_port); //we need to add the port that the server will listen on for incoming packets
     ApplicationContainer serverApp = server.Install(wifiRxNode); //holds vector of Application pointers. Install() creates one UDP application on each of input nodes from NodeContainer.
 
-    OnOffHelper client ("UdpSocketFactory","10.0.1.0"); //makes it easier to work with OnOffApplications. UdpSocketFactory is API to create UDP socket instances sending to addr specified.
+    OnOffHelper client ("ns3::UdpSocketFactory","10.0.1.0"); //makes it easier to work with OnOffApplications. UdpSocketFactory is API to create UDP socket instances sending to addr specified.
     UdpClientHelper client("10.0.1.0",udp_server_port); //address of remote UDP server
     ApplicationContainer clientApp = client.Install(wifiTxNodes); //install OnOffApplication on each node of input as specified by OnOffHelper. Holds vector of Application pointers. 
     client.SetConstantRate(DATA_RATE*8*1000000, uint32_t 512); //use OnOffHelper to set data rate (global variable we set) and packet size (which is default 512)
