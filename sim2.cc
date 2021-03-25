@@ -141,12 +141,17 @@ int main(int argc, char *argv[]){
     ApplicationContainer clientApp = client.Install(wifiTxNodes); //install OnOffApplication on each node of input as specified by OnOffHelper. Holds vector of Application pointers. 
     client.SetConstantRate(DataRate(DATA_RATE*8*1000000), 512); //use OnOffHelper to set data rate (global variable we set) and packet size (which is default 512)
     uint64_t totalPacketsThroughAP = DynamicCast<UdpServer> (serverApp.Get (0))->GetReceived ();
-    uint64_t totalPacketsSent = 0;
-    for( uint32_t i = 0; i < N; i++)
-    {
-        totalPacketsSent += DynamicCast<UdpClient> (clientApp.Get (i))->GetTotalTx ();
-    }
-    double sat_throughput = (double) totalPacketsThroughAP * 512 / (double) totalPacketsSent;
+    // uint64_t totalPacketsSent = 0;
+    // for( uint32_t i = 0; i < N; i++)
+    // {
+    //     totalPacketsSent += DynamicCast<UdpClient> (clientApp.Get (i))->GetTotalTx ();
+    // }
+    // double sat_throughput = (double) totalPacketsThroughAP * 512 / (double) totalPacketsSent;
+    Ptr<FlowMonitor> flowMonitor;
+    FlowMonitorHelper flowHelper;
+    flowMonitor = flowHelper.InstallAll();
+
+    flowMonitor->SerializeToXmlFile("NameOfFile.xml", true, true);
 
     std::cout << "Sat Throughput: " << sat_throughput << std::endl;
 
