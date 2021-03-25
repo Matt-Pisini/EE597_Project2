@@ -141,7 +141,8 @@ int main(int argc, char *argv[]){
     // UdpClientHelper client(InetSocketAddress(wifiRxInterface.GetAddress(0),udp_server_port),udp_server_port); //address of remote UDP server
     ApplicationContainer clientApp = client.Install(wifiTxNodes); //install OnOffApplication on each node of input as specified by OnOffHelper. Holds vector of Application pointers. 
     client.SetConstantRate(DataRate(DATA_RATE*8*1000000), 512); //use OnOffHelper to set data rate (global variable we set) and packet size (which is default 512)
-    // uint64_t totalPacketsThroughAP = DynamicCast<UdpServer> (serverApp.Get (0))->GetReceived ();
+    client.SetAttribute();
+    uint64_t totalPacketsThroughAP = DynamicCast<UdpServer> (serverApp.Get (0))->GetReceived ();
     // uint64_t totalPacketsSent = 0;
     // for( uint32_t i = 0; i < N; i++)
     // {
@@ -154,7 +155,7 @@ int main(int argc, char *argv[]){
 
     flowMonitor->SerializeToXmlFile("NameOfFile.xml", true, true);
 
-    // std::cout << "Sat Throughput: " << sat_throughput << std::endl;
+    std::cout << totalPacketsThroughAP<< std::endl;
 
     //Set total simulation time
     clientApp.Start( Seconds(0.0) ); //arranges for all applications in this container (i.e. all nodes) to start at specified time
