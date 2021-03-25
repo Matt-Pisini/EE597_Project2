@@ -66,7 +66,7 @@ int main(int argc, char *argv[]){
     //parameters to change according to research paper.
     WifiHelper wifi;
     wifi.SetStandard(WIFI_STANDARD_80211b);
-    wifi.SetRemoteStationManager("ns3::ConstantRateWifiMangager",
+    wifi.SetRemoteStationManager("ns3::ConstantRateWifiManager",
                                 "DataMode", StringValue("DsssRate1Mbps"));
     WifiMacHelper mac;
     Ssid ssid = Ssid("ns-3-ssid");
