@@ -10,6 +10,15 @@
 #include "ns3/csma-module.h"
 
 
+/* NEED TO DO:
+- Write a function that calculates throughput 
+    - needs to be done for each node
+    - I beleive within application container there are attributes that show this
+- Make sure cmd line inputs work so we can input in N and DATA_RATE
+- Make graphs of above ^
+
+*/
+
 using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE ("Sim2ScenarioA");
