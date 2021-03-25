@@ -15,6 +15,7 @@
 #include "ns3/ipv4-interface-container.h"
 #include "ns3/on-off-helper.h"
 #include "ns3/wifi-module.h"
+#include "ns3/flow-monitor.h"
 
 /* NEED TO DO:
 - Write a function that calculates throughput 
@@ -153,7 +154,7 @@ int main(int argc, char *argv[]){
 
     flowMonitor->SerializeToXmlFile("NameOfFile.xml", true, true);
 
-    std::cout << "Sat Throughput: " << sat_throughput << std::endl;
+    // std::cout << "Sat Throughput: " << sat_throughput << std::endl;
 
     //Set total simulation time
     clientApp.Start( Seconds(0.0) ); //arranges for all applications in this container (i.e. all nodes) to start at specified time
