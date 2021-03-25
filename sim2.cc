@@ -141,7 +141,10 @@ int main(int argc, char *argv[]){
     // UdpClientHelper client(InetSocketAddress(wifiRxInterface.GetAddress(0),udp_server_port),udp_server_port); //address of remote UDP server
     UdpClientHelper client(wifiRxInterface.GetAddress(0),udp_server_port); //address of remote UDP server
 
-    
+  client.SetAttribute ("MaxPackets", UintegerValue (1));
+//   client.SetAttribute ("Interval", TimeValue (Seconds (1.0)));
+  client.SetAttribute ("PacketSize", UintegerValue (512));
+
     // client.SetConstantRate(DataRate(DATA_RATE*8*1000000), 512); //use OnOffHelper to set data rate (global variable we set) and packet size (which is default 512)
     ApplicationContainer clientApp = client.Install(wifiTxNodes); //install OnOffApplication on each node of input as specified by OnOffHelper. Holds vector of Application pointers. 
     // client.SetAttribute("MaxPackets", 1);
@@ -167,7 +170,7 @@ int main(int argc, char *argv[]){
     serverApp.Stop( Seconds(END_SIMULATION) );
 
     //run simulation
-    // Simulator::Stop (Seconds (END_SIMULATION));
+    Simulator::Stop (Seconds (END_SIMULATION));
     Simulator::Run();
     Simulator::Destroy ();
     return 0;
