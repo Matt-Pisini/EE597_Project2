@@ -29,6 +29,9 @@ int main(int argc, char *argv[]){
    // cmd.AddValue("maxCw", "Maximimum contention window size", maxCw);
    // cmd.Parse(argc, argv);
 
+    //Config::SetDefault("ns3::Txop::CwMin", UintegerValue(minCw));
+    //Config::SetDefault("ns3::Txop::CwMax", UintegerValue(maxCw));
+
 
     //Creating nodes for Tx and Rx
     NodeContainer wifiRxNode;
@@ -53,12 +56,12 @@ int main(int argc, char *argv[]){
     //Need to look into wifi-mac.cc or wifi-phy.cc for configuration
     //parameters to change according to research paper.    
     WifiHelper wifi;
-    wifi.SetStandard(WIFI_PHY_STANDARD_80211b);
+    wifi.SetStandard(WIFI_STANDARD_80211b);
     wifi.SetRemoteStationManager("ns3::ConstantRateWifiManager",
                                 "DataMode", StringValue("DsssRate1Mbps"),
                                 "ControlMode", StringValue("DsssRate1Mbps"));
     WifiMacHelper mac;
-    Ssid ssid = Ssid("ns-3-ssid");
+    Ssid ssid = Ssid("ns3-80211b");
     mac.SetType("ns3::AdhocWifiMac", "Ssid", SsidValue(ssid));
 
 
@@ -75,6 +78,7 @@ int main(int argc, char *argv[]){
     Ptr<WifiMac> wifi_mac = wifi_dev->GetMac();
     PointerValue ptr;
     Ptr<Txop> dca;
+    wifi_mac->GetAttribute("Txop", ptr);
     dca = ptr.Get<Txop>();
     dca->SetMinCw(minCw);
     dca->SetMaxCw(maxCw);
@@ -98,19 +102,19 @@ int main(int argc, char *argv[]){
     mobility.Install(wifiTxNodes);
 
     //Install network stack on nodes
-    /*********** EXPLANATION ***********
-    We use this function to aggregate other objects for IP/TCP/UDP functionality to our existing nodes. 
-    This includes protocols like ARP, IPv4, neighbor discovery, and more. Essentially our nodes are basic
-    until we add all this internet related functionality to them.
-    ***********************************/    
+    //EXPLANATION
+    //We use this function to aggregate other objects for IP/TCP/UDP functionality to our existing nodes. 
+    //This includes protocols like ARP, IPv4, neighbor discovery, and more. Essentially our nodes are basic
+    //until we add all this internet related functionality to them.    
+    
     InternetStackHelper stack;
     stack.Install(wifiRxNode);
     stack.Install(wifiTxNodes);
 
     //Configure IP addresses and internet interfaces:
-    /*********** EXPLANATION ***********
-    Helper class that is a simple IPv4 address generator.
-    ***********************************/    
+    //EXPLANATION
+    //Helper class that is a simple IPv4 address generator.
+    
     Ipv4AddressHelper address;
 
     address.SetBase("10.1.1.0", "255.255.255.0");
@@ -118,7 +122,7 @@ int main(int argc, char *argv[]){
     Ipv4InterfaceContainer wifiTxInterface = address.Assign(txDevices);
 
     for(uint32_t i = 0; i < N; i++){
-        OnOffHelper client ("ns3::UdpSocketFactory", Address(InetSocketAddress(wifiRxInterface.GetAddress(uint32_t(0), uint32_t(5000)))));
+        OnOffHelper client ("ns3::UdpSocketFactory", Address(InetSocketAddress(wifiRxInterface.GetAddress(uint32_t(0)), uint32_t(9))));
         client.SetConstantRate(DataRate("5Mb/s"), uint32_t(512));
         ApplicationContainer clientApp = client.Install(wifiTxNodes.Get(i));
         clientApp.Start(Seconds(0.1));
@@ -127,7 +131,7 @@ int main(int argc, char *argv[]){
 
     // Build your applications and monitor throughtput:
     //UdpServerHelper and UdpClientHelper are meant to help facilitate client-server communication for UDP
-    PacketSinkHelper sink("ns3::UdpSocketFactory", Address(InetSocketAddress(wifiRxInterface.GetAddress(uint32_t(0), uint32_t(5000)))));
+    PacketSinkHelper sink("ns3::UdpSocketFactory", Address(InetSocketAddress(wifiRxInterface.GetAddress(uint32_t(0)), uint32_t(9))));
     ApplicationContainer serverApp = sink.Install(wifiRxNode.Get(uint32_t(0)));
     serverApp.Start(Seconds(0.0));
 
