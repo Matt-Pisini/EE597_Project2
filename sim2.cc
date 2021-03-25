@@ -18,7 +18,7 @@
 - Make graphs of above ^
 
 */
-
+#define END_SIMULATION 20.0 //total simulation time
 using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE ("Sim2ScenarioA");
@@ -26,9 +26,10 @@ NS_LOG_COMPONENT_DEFINE ("Sim2ScenarioA");
 int main(int argc, char *argv[]){
     //Reading command line arguments
     int N = 3;          //Number of nodes in network
-    int DATE_RATE;      //data rate (Mbits/s)
+    uint64_t DATE_RATE = 1;      //data rate (Mbits/s)
     CommandLine cmd (__FILE__);
     cmd.AddValue("N", "Number of Tx Nodes/Devices", N);
+    cmd.AddValue("DATA_RATE", "Data Rate in Mbits/s", DATA_RATE);
     cmd.Parse(argc, argv);
 
 
@@ -87,8 +88,8 @@ int main(int argc, char *argv[]){
     positionAlloc->Add (Vector (0.0, 0.0, 0.0));
     float rho = 1;
     float pi = 3.14159265;
-    for (uint32_t i=0;i<nWifi;i++){
-        double theta = i*2*pi/nWifi;
+    for (uint32_t i=0;i<N;i++){
+        double theta = i*2*pi/N;
         positionAlloc->Add (Vector (rho*cos(theta), rho*sin(theta), 0.0));
     }
     mobility.SetPositionAllocator (positionAlloc);
@@ -112,7 +113,7 @@ int main(int argc, char *argv[]){
     Ipv4AddressHelper address;
     address.setBase("10.0.0.0","255.255.255.0"); //sets the base network IP and mask in which we allocate IP addresses to nodes
 
-    Ipv4InterfaceContainer wifiInterfaces; //this object is a list of (Ptr>ipv4>,interface_index) pairs for all NetDevices
+    Ipv4InterfaceContainer wifiInterfaces; //this object is a list of (Ptr<ipv4>,interface_index) pairs for all NetDevices
     wifiInterface = address.Assign(txDevices); //assign function allocates IP addresses to all the nodes in the NetDeviceContainer vector
     address.setBase("10.0.1.0","255.255.255.0"); //sets the base network IP and mask in which we allocate IP addresses to nodes
     address.Assign(rxDevice); //Not sure if I can just assign this without storing it in Ipv4InterfaceContainer vector... How/why is this vector used?
@@ -127,12 +128,25 @@ int main(int argc, char *argv[]){
     OnOffHelper client ("UdpSocketFactory","10.0.1.0"); //makes it easier to work with OnOffApplications. UdpSocketFactory is API to create UDP socket instances sending to addr specified.
     UdpClientHelper client("10.0.1.0",udp_server_port); //address of remote UDP server
     ApplicationContainer clientApp = client.Install(wifiTxNodes); //install OnOffApplication on each node of input as specified by OnOffHelper. Holds vector of Application pointers. 
-    client.SetConstantRate(DATE_RATE, uint32_t 512); //use OnOffHelper to set data rate (global variable we set) and packet size (which is default 512)
+    client.SetConstantRate(DATE_RATE*8*1000000, uint32_t 512); //use OnOffHelper to set data rate (global variable we set) and packet size (which is default 512)
     uint64_t totalPacketsThroughAP = DynamicCast<UdpServer> (serverApp.Get (0))->GetReceived ();
+    uint64_t totalPacketsSent = 0;
+    for( int i = 0; i < N; i++)
+    {
+        totalPacketsSent += DynamicCast<UdpClient> (clientApp.Get (i))->GetTotalTx ();
+    }
+    double sat_throughput = (double) totalPacketsThroughAP * 512 / (double) totalPacketsSent;
+
+    std::cout << "Sat Throughput: " << sat_throughput << std::endl;
+
+    //Set total simulation time
     clientApp.Start( Seconds(0.0) ); //arranges for all applications in this container (i.e. all nodes) to start at specified time
-    clientApp.Stop( Seconds(20.0) ); //arranges for all applications in this container (i.e. all nodes) to stop at specified time. Need to play around with this.
+    clientApp.Stop( Seconds(END_SIMULATION) ); //arranges for all applications in this container (i.e. all nodes) to stop at specified time. Need to play around with this.
+    serverApp.Start( Seconds(0.0) );
+    serverApp.Stop( Seconds(END_SIMULATION) );
 
     //run simulation
+    Simulator::Stop (Seconds (END_SIMULATION));
     Simulator::Run();
     Simulator::Destroy ();
     return 0;
