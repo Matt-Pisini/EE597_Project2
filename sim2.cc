@@ -124,7 +124,7 @@ int main(int argc, char *argv[]){
     address.SetBase("10.0.0.0","255.255.255.0"); //sets the base network IP and mask in which we allocate IP addresses to nodes
     Ipv4InterfaceContainer wifiRxInterface;
     wifiRxInterface = address.Assign(rxDevice); //Not sure if I can just assign this without storing it in Ipv4InterfaceContainer vector... How/why is this vector used?
-
+    address.NewAddress();
     Ipv4InterfaceContainer wifiInterfaces; //this object is a list of (Ptr<ipv4>,interface_index) pairs for all NetDevices
     wifiInterfaces = address.Assign(txDevices); //assign function allocates IP addresses to all the nodes in the NetDeviceContainer vector
 
