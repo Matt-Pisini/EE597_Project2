@@ -62,7 +62,7 @@ int main(int argc, char *argv[]){
     //Need to look into wifi-mac.cc or wifi-phy.cc for configuration
     //parameters to change according to research paper.
     WifiHelper wifi;
-    wifi.SetStandard(WIFI_PHY_STANDARD_80211b);
+    wifi.SetStandard(WIFI_STANDARD_80211b);
     wifi.SetRemoteStationManager("ns3::ConstantRateWifiMangager",
                                 "DataMode", StringValue("DsssRate1Mbps"));
     WifiMacHelper mac;
@@ -139,7 +139,7 @@ int main(int argc, char *argv[]){
     client.SetConstantRate(DATA_RATE*8*1000000, uint32_t 512); //use OnOffHelper to set data rate (global variable we set) and packet size (which is default 512)
     uint64_t totalPacketsThroughAP = DynamicCast<UdpServer> (serverApp.Get (0))->GetReceived ();
     uint64_t totalPacketsSent = 0;
-    for( int i = 0; i < N; i++)
+    for( uint32_t i = 0; i < N; i++)
     {
         totalPacketsSent += DynamicCast<UdpClient> (clientApp.Get (i))->GetTotalTx ();
     }
