@@ -35,7 +35,7 @@ int main(int argc, char *argv[]){
     uint32_t N = 3;          //Number of nodes in network
     uint64_t DATA_RATE = 1;      //data rate (Mbits/s)
     uint32_t minCw = 1;
-    uint32_t maxCw = 1;
+    uint32_t maxCw = 10;
     CommandLine cmd (__FILE__);
     cmd.AddValue("N", "Number of Tx Nodes/Devices", N);
     cmd.AddValue("DATA_RATE", "Data Rate in Mbits/s", DATA_RATE);
