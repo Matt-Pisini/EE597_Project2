@@ -139,9 +139,9 @@ int main(int argc, char *argv[]){
     std::string thing = "ns3::UdpSocketFactory";
     OnOffHelper client (thing,InetSocketAddress(wifiRxInterface.GetAddress(0),udp_server_port)); //makes it easier to work with OnOffApplications. UdpSocketFactory is API to create UDP socket instances sending to addr specified.
     // UdpClientHelper client(InetSocketAddress(wifiRxInterface.GetAddress(0),udp_server_port),udp_server_port); //address of remote UDP server
-    ApplicationContainer clientApp = client.Install(wifiTxNodes); //install OnOffApplication on each node of input as specified by OnOffHelper. Holds vector of Application pointers. 
     client.SetConstantRate(DataRate(DATA_RATE*8*1000000), 512); //use OnOffHelper to set data rate (global variable we set) and packet size (which is default 512)
-    client.SetAttribute("MaxPackets", 1);
+    ApplicationContainer clientApp = client.Install(wifiTxNodes); //install OnOffApplication on each node of input as specified by OnOffHelper. Holds vector of Application pointers. 
+    // client.SetAttribute("MaxPackets", 1);
     uint64_t totalPacketsThroughAP = DynamicCast<UdpServer> (serverApp.Get (0))->GetReceived ();
     // uint64_t totalPacketsSent = 0;
     // for( uint32_t i = 0; i < N; i++)
