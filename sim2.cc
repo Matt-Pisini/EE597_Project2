@@ -8,6 +8,9 @@
 #include "ns3/yans-wifi-helper.h"
 #include "ns3/ssid.h"
 #include "ns3/csma-module.h"
+#include "ns3/txop.h"
+#include "ns3/wifi-net-device.h"
+#include "ns3/mobility-module.h"
 
 
 /* NEED TO DO:
