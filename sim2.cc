@@ -44,6 +44,8 @@ int main(int argc, char *argv[]){
     cmd.Parse(argc, argv);
 
 
+LogComponentEnable("UdpClientApplication", LOG_LEVEL_INFO);
+    LogComponentEnable("UdpServerApplication", LOG_LEVEL_INFO);
     //Creating nodes for Tx and Rx
     NodeContainer wifiRxNode;
     wifiRxNode.Create(1);
