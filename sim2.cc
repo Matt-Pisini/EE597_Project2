@@ -15,7 +15,7 @@
 #include "ns3/ipv4-interface-container.h"
 #include "ns3/on-off-helper.h"
 #include "ns3/wifi-module.h"
-#include "ns3/flow-monitor.h"
+#include "ns3/flow-monitor-helper.h"
 
 /* NEED TO DO:
 - Write a function that calculates throughput 
