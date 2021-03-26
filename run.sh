@@ -33,7 +33,7 @@ if [[ $1 != "A" && $1 != "B" ]]; then
 fi
 
 if [[ $2 == "node" ]]; then
-    for ((i=5; i<=15; i += 5))
+    for ((i=2; i<=20; i+=2))
     do
         eval "$COMMAND \"$SRC_FILE $CASE$1 $DATA_RATE$FIXED_DATA_RATE $NUM_NODES$i\"" | $PIPE_OUTPUT >> $OUTPUT_FILE_NODE
     done
@@ -56,3 +56,4 @@ rm $OUTPUT_FILE
 # eval "python $PY_SCRIPT $OUTPUT_FILE $2"
 # echo "Finished running tasks"
 scp $SCP_COMMAND
+echo "s"

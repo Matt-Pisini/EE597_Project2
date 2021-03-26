@@ -14,7 +14,7 @@ T_per_node_list = []
 DR_list = []
 
 for item in input_file_lines:
-    throughput, per_node_throughput, node_num, data_rate = item.split(' ')
+    throughput, per_node_throughput, node_num, data_rate = item.split()
     if input_type == "node":
         T_list.append(throughput)
         T_per_node_list.append(per_node_throughput)

@@ -174,7 +174,7 @@ int main(int argc, char *argv[]){
     double totalRxBytes = sinkApp->GetTotalRx();
     float throughput = totalRxBytes*8.0/(endTrans - startTrans);
     throughput = throughput/1000;
-    std::cout<< throughput << "  "<< throughput/(double)N << "  "<< N << "  "<< Data_Rate/1000000 <<std::endl;
+    std::cout<< throughput << " "<< throughput/(double)N << " "<< N << " "<< Data_Rate/1000000 <<std::endl;
 
     Simulator::Destroy();
 
