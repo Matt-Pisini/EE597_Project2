@@ -19,19 +19,24 @@ NS_LOG_COMPONENT_DEFINE ("Sim2ScenarioA");
 int main(int argc, char *argv[]){
     //Reading command line arguments
     uint32_t N = 7;
-    //std::string Data_Rate = "1Mb/s";      //data rate (Mbits/s)
+    uint64_t Data_Rate = 5;      //data rate (Mbits/s)
     uint32_t minCw = 1;
     uint32_t maxCw = 1023;
-    //CommandLine cmd;
-    //cmd.AddValue("N", "Number of Tx Nodes/Devices", N);
-   // cmd.AddValue("Data_Rate", "Data rate enter as string example: 5Mb/s", Data_Rate);
-    //cmd.AddValue("minCw", "Minimum contention window size", minCw);
-   // cmd.AddValue("maxCw", "Maximimum contention window size", maxCw);
-   // cmd.Parse(argc, argv);
+    char CASE = 'A';
+    CommandLine cmd;
+    cmd.AddValue("N", "Number of Tx Nodes/Devices", N);
+    cmd.AddValue("Data_Rate", "Data rate in units of Kb/s", Data_Rate);
+    cmd.AddValue("CASE", "Case A Cwnd size 1-1023 Case B Cwnd size 63-127", CASE);
+    cmd.Parse(argc, argv);
+   
+    //Change Cwnd max and min if cae B is selected. Default is Case A.
+    if(CASE == 'B' || CASE =='b'){
+	minCw = 63;
+	maxCw = 127;
+    }
 
-    //Config::SetDefault("ns3::Txop::CwMin", UintegerValue(minCw));
-    //Config::SetDefault("ns3::Txop::CwMax", UintegerValue(maxCw));
-
+    //multiple Data rate by 1000 to convert to Kb/s
+    Data_Rate *= 1000;
 
     //Creating nodes for Tx and Rx
     NodeContainer wifiRxNode;
@@ -123,7 +128,7 @@ int main(int argc, char *argv[]){
 
     for(uint32_t i = 0; i < N; i++){
         OnOffHelper client ("ns3::UdpSocketFactory", Address(InetSocketAddress(wifiRxInterface.GetAddress(uint32_t(0)), uint32_t(9))));
-        client.SetConstantRate(DataRate("5Mb/s"), uint32_t(512));
+        client.SetConstantRate(DataRate(Data_Rate), uint32_t(512));
         ApplicationContainer clientApp = client.Install(wifiTxNodes.Get(i));
         clientApp.Start(Seconds(0.1));
         clientApp.Stop(Seconds(9.0));
@@ -150,20 +155,26 @@ int main(int argc, char *argv[]){
     std::map<FlowId, FlowMonitor::FlowStats> stats = monitor->GetFlowStats();
     double endTrans = 9.0;
     double startTrans = 10.0;
+    //uint64_t arrTxBytes[N];
+    //uint64_t totalTxBytes;
+    //int j = 0;
 
-    for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator it= stats.begin(); it!= stats.end(); it++){
-        if (endTrans < it->second.timeLastRxPacket.GetSeconds()){
-            endTrans = it->second.timeLastRxPacket.GetSeconds();
+    for (auto i : stats){
+        if (endTrans < i.second.timeLastRxPacket.GetSeconds()){
+            endTrans = i.second.timeLastRxPacket.GetSeconds();
         }
-        if(startTrans > it->second.timeFirstRxPacket.GetSeconds()){
-            startTrans = it->second.timeFirstRxPacket.GetSeconds();
+        if(startTrans > i.second.timeFirstRxPacket.GetSeconds()){
+            startTrans = i.second.timeFirstRxPacket.GetSeconds();
         }
+	//arrTxBytes[j] = i.second.txBytes;
+	//totalTxBytes += arrTxBytes[j];
+	//j+=1;
     }
 
-    double totalBytes = sinkApp->GetTotalRx();
-    float throughput = totalBytes*8.0/(endTrans - startTrans);
+    double totalRxBytes = sinkApp->GetTotalRx();
+    float throughput = totalRxBytes*8.0/(endTrans - startTrans);
     throughput = throughput/1000;
-    std::cout<<"throughtput: "<<throughput<<std::endl;
+    std::cout<< throughput << "  "<< throughput/(double)N << "  "<< N << "  "<< Data_Rate/1000 <<std::endl;
 
     Simulator::Destroy();
 
