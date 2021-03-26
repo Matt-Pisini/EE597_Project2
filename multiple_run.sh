@@ -6,5 +6,5 @@ RUN_SCRIPT='bash run.sh A node'
 
 for ((i=0; i<$1; i++))
 do
-    echo $RUN_SCRIPT $i
+    eval $RUN_SCRIPT $i
 done
