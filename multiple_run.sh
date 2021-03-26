@@ -1,6 +1,4 @@
 #!/bin/bash
-# INPUTS TO SCRIPT
-# 1) number of trials to average over
 
 RUN_SCRIPT_A_node='bash run.sh A node'
 RUN_SCRIPT_A_rate='bash run.sh A rate'
