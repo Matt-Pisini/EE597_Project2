@@ -8,8 +8,8 @@ SRC_FILE='sim2_v2.cc'
 DEST_PATH='/home/ee597/ns-3-allinone/ns-3-dev/scratch/'
 SRC_PATH=$PWD
 DEST_RUN='/home/ee597/ns-3-allinone/ns-3-dev/'
-OUTPUT_FILE_RATE="vary_rate$1.txt"
-OUTPUT_FILE_NODE="vary_node$1.txt"
+OUTPUT_FILE_RATE="vary_rate$3.txt"
+OUTPUT_FILE_NODE="vary_node$3.txt"
 HELP_OUTPUT=$'Input 1 = "A" or "B" meaning case A (CW = [1,1023]) or case B (CW = [63,127])
 Input 2 = "node" or "rate" meaning vary nodes (E1) or vary rate (E2)'
 
