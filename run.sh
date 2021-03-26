@@ -23,7 +23,6 @@ CASE='--CASE='
 
 cp $SRC_FILE $DEST_PATH
 cd $DEST_RUN
-eval $COMMAND
 
 if [[ $1 != "A" && $1 != "B" ]]; then
     echo "Incorrect input for 1st parameter."
@@ -34,13 +33,13 @@ fi
 if [[ $2 == "node" ]]; then
     for ((i=5; i<=50; i += 5))
     do
-        eval "$COMMAND \"$SRC_FILE $CASE$1 $DATA_RATE$FIXED_DATA_RATE $NUM_NODES$i\"" >> $OUTPUT_FILE_NODE
+        echo "$COMMAND \"$SRC_FILE $CASE$1 $DATA_RATE$FIXED_DATA_RATE $NUM_NODES$i\"" >> $OUTPUT_FILE_NODE
     done
     OUTPUT_FILE=$OUTPUT_FILE_NODE
 elif [[ $2 == "rate" ]]; then
     for ((i=5; i<=50; i += 5))
     do
-        eval "$COMMAND \"$SRC_FILE $CASE$1 $DATA_RATE$i $NUM_NODES$FIXED_NUM_NODES\"" >> $OUTPUT_FILE_RATE
+        echo "$COMMAND \"$SRC_FILE $CASE$1 $DATA_RATE$i $NUM_NODES$FIXED_NUM_NODES\"" >> $OUTPUT_FILE_RATE
     done
     OUTPUT_FILE=$OUTPUT_FILE_RATE
 else
