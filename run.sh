@@ -21,7 +21,6 @@ DATA_RATE='--Data_Rate='
 COMMAND='./waf --run'
 CASE='--CASE='
 PIPE_OUTPUT='tail -n 1' #last line of stdout
-SCP_COMMAND='*.txt Ms.Al@192.168.86.22:/Users/Ms.Al/Desktop/Matt'
 
 cp $SRC_FILE $DEST_PATH
 cd $DEST_RUN
@@ -33,7 +32,7 @@ if [[ $1 != "A" && $1 != "B" ]]; then
 fi
 
 if [[ $2 == "node" ]]; then
-    for ((i=2; i<=30; i++))
+    for ((i=2; i<=4; i++))
     do
         eval "$COMMAND \"$SRC_FILE $CASE$1 $DATA_RATE$FIXED_DATA_RATE $NUM_NODES$i\"" | $PIPE_OUTPUT >> $OUTPUT_FILE_NODE
     done
@@ -55,6 +54,7 @@ rm $OUTPUT_FILE
 
 # Run Python script & SCP results
 # PY_SCRIPT='analyze.py'
+# SCP_COMMAND='*.txt Ms.Al@192.168.86.22:/Users/Ms.Al/Desktop/Matt'
 # cd $SRC_PATH
 # eval "python $PY_SCRIPT $OUTPUT_FILE $2"
 # echo "Finished running tasks"
