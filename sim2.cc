@@ -36,11 +36,11 @@ int main(int argc, char *argv[]){
     uint64_t DATA_RATE = 1;      //data rate (Mbits/s)
     uint32_t minCw = 1;
     uint32_t maxCw = 10;
+    std::string CASE;
     CommandLine cmd (__FILE__);
     cmd.AddValue("N", "Number of Tx Nodes/Devices", N);
     cmd.AddValue("DATA_RATE", "Data Rate in Mbits/s", DATA_RATE);
-    cmd.AddValue("minCw", "Minimum contention window size", minCw);
-    cmd.AddValue("maxCw", "Maximum contention window size", maxCw);
+    cmd.AddValue("CASE", "A or B", CASE);
     cmd.Parse(argc, argv);
 
     //Creating nodes for Tx and Rx

@@ -51,5 +51,5 @@ fi
 
 cp $OUTPUT_FILE $SRC_PATH
 cd $SRC_PATH
-eval "python $PY_SCRIPT $OUTPUT_FILE $2"
-rm $OUTPUT_FILE
+echo "python $PY_SCRIPT $OUTPUT_FILE $2"
+# rm $OUTPUT_FILE
