@@ -52,5 +52,5 @@ fi
 cp $OUTPUT_FILE $SRC_PATH
 rm $OUTPUT_FILE
 cd $SRC_PATH
-eval "python3 $PY_SCRIPT $OUTPUT_FILE $2"
+# eval "python $PY_SCRIPT $OUTPUT_FILE $2"
 echo "Finished running tasks"
