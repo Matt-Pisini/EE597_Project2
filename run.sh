@@ -50,6 +50,6 @@ fi
 
 cp $OUTPUT_FILE $SRC_PATH
 rm $OUTPUT_FILE
-# cd $SRC_PATH
-# echo "python $PY_SCRIPT $OUTPUT_FILE $2"
+cd $SRC_PATH
+echo "python $PY_SCRIPT $OUTPUT_FILE $2"
 echo "Finished running tasks"
