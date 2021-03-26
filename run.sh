@@ -21,7 +21,7 @@ DATA_RATE='--Data_Rate='
 COMMAND='./waf --run'
 CASE='--CASE='
 PIPE_OUTPUT='tail -n 1' #last line of stdout
-SCP_COMMAND='*.png Ms.Al@192.168.86.22:/Users/Ms.Al/Desktop/Matt'
+SCP_COMMAND='*.txt Ms.Al@192.168.86.22:/Users/Ms.Al/Desktop/Matt'
 
 cp $SRC_FILE $DEST_PATH
 cd $DEST_RUN
