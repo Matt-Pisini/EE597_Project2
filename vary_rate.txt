@@ -1,0 +1,60 @@
+Nodes: 5
+./waf --run "sim2.cc --CASE=B 5 --DATA_RATE=5 --N=20"
+Nodes: 10
+./waf --run "sim2.cc --CASE=B 10 --DATA_RATE=10 --N=20"
+Nodes: 15
+./waf --run "sim2.cc --CASE=B 15 --DATA_RATE=15 --N=20"
+Nodes: 20
+./waf --run "sim2.cc --CASE=B 20 --DATA_RATE=20 --N=20"
+Nodes: 25
+./waf --run "sim2.cc --CASE=B 25 --DATA_RATE=25 --N=20"
+Nodes: 30
+./waf --run "sim2.cc --CASE=B 30 --DATA_RATE=30 --N=20"
+Nodes: 35
+./waf --run "sim2.cc --CASE=B 35 --DATA_RATE=35 --N=20"
+Nodes: 40
+./waf --run "sim2.cc --CASE=B 40 --DATA_RATE=40 --N=20"
+Nodes: 45
+./waf --run "sim2.cc --CASE=B 45 --DATA_RATE=45 --N=20"
+Nodes: 50
+./waf --run "sim2.cc --CASE=B 50 --DATA_RATE=50 --N=20"
+Nodes: 5
+./waf --run "sim2.cc --CASE=B 5 --DATA_RATE=5 --N=20"
+Nodes: 10
+./waf --run "sim2.cc --CASE=B 10 --DATA_RATE=10 --N=20"
+Nodes: 15
+./waf --run "sim2.cc --CASE=B 15 --DATA_RATE=15 --N=20"
+Nodes: 20
+./waf --run "sim2.cc --CASE=B 20 --DATA_RATE=20 --N=20"
+Nodes: 25
+./waf --run "sim2.cc --CASE=B 25 --DATA_RATE=25 --N=20"
+Nodes: 30
+./waf --run "sim2.cc --CASE=B 30 --DATA_RATE=30 --N=20"
+Nodes: 35
+./waf --run "sim2.cc --CASE=B 35 --DATA_RATE=35 --N=20"
+Nodes: 40
+./waf --run "sim2.cc --CASE=B 40 --DATA_RATE=40 --N=20"
+Nodes: 45
+./waf --run "sim2.cc --CASE=B 45 --DATA_RATE=45 --N=20"
+Nodes: 50
+./waf --run "sim2.cc --CASE=B 50 --DATA_RATE=50 --N=20"
+Nodes: 5
+./waf --run "sim2.cc --CASE=B 5 --DATA_RATE=5 --N=20"
+Nodes: 10
+./waf --run "sim2.cc --CASE=B 10 --DATA_RATE=10 --N=20"
+Nodes: 15
+./waf --run "sim2.cc --CASE=B 15 --DATA_RATE=15 --N=20"
+Nodes: 20
+./waf --run "sim2.cc --CASE=B 20 --DATA_RATE=20 --N=20"
+Nodes: 25
+./waf --run "sim2.cc --CASE=B 25 --DATA_RATE=25 --N=20"
+Nodes: 30
+./waf --run "sim2.cc --CASE=B 30 --DATA_RATE=30 --N=20"
+Nodes: 35
+./waf --run "sim2.cc --CASE=B 35 --DATA_RATE=35 --N=20"
+Nodes: 40
+./waf --run "sim2.cc --CASE=B 40 --DATA_RATE=40 --N=20"
+Nodes: 45
+./waf --run "sim2.cc --CASE=B 45 --DATA_RATE=45 --N=20"
+Nodes: 50
+./waf --run "sim2.cc --CASE=B 50 --DATA_RATE=50 --N=20"
