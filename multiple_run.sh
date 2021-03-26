@@ -2,9 +2,9 @@
 # INPUTS TO SCRIPT
 # 1) number of trials to average over
 
-RUN_SCRIPTA='bash run.sh A node'
+RUN_SCRIPT='bash run.sh A node'
 
 for ((i=0; i<$1; i++))
 do
-    echo $RUN_SCRIPTA $i
+    echo $RUN_SCRIPT $i
 done
