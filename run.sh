@@ -12,6 +12,7 @@ OUTPUT_FILE_NODE='vary_node.txt'
 HELP_OUTPUT=$'Input 1 = "A" or "B" meaning case A (CW = [1,1023]) or case B (CW = [63,127])
 Input 2 = "node" or "rate" meaning vary nodes (E1) or vary rate (E2)'
 PY_SCRIPT='analyze.py'
+
 # Command parameters
 FIXED_NUM_NODES='20'
 NUM_NODES='--N='
@@ -51,5 +52,5 @@ fi
 cp $OUTPUT_FILE $SRC_PATH
 rm $OUTPUT_FILE
 cd $SRC_PATH
-eval "python $PY_SCRIPT $OUTPUT_FILE $2"
+eval "python3 $PY_SCRIPT $OUTPUT_FILE $2"
 echo "Finished running tasks"
