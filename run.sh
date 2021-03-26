@@ -16,7 +16,7 @@ PY_SCRIPT='analyze.py'
 FIXED_NUM_NODES='20'
 NUM_NODES='--N='
 FIXED_DATA_RATE='10'
-DATA_RATE='--DATA_RATE='
+DATA_RATE='--Data_Rate='
 COMMAND='./waf --run'
 CASE='--CASE='
 PIPE_OUTPUT='tail -n 1' #last line of stdout
