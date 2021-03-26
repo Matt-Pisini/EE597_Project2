@@ -19,7 +19,7 @@ FIXED_DATA_RATE='10'
 DATA_RATE='--DATA_RATE='
 COMMAND='./waf --run'
 CASE='--CASE='
-
+PIPE_OUTPUT='tail -n 1'
 
 cp $SRC_FILE $DEST_PATH
 cd $DEST_RUN
@@ -33,13 +33,13 @@ fi
 if [[ $2 == "node" ]]; then
     for ((i=5; i<=50; i += 5))
     do
-        eval "$COMMAND \"$SRC_FILE $CASE$1 $DATA_RATE$FIXED_DATA_RATE $NUM_NODES$i\"" >> $OUTPUT_FILE_NODE
+        eval "$COMMAND \"$SRC_FILE $CASE$1 $DATA_RATE$FIXED_DATA_RATE $NUM_NODES$i\"" | $PIPE_OUTPUT >> $OUTPUT_FILE_NODE
     done
     OUTPUT_FILE=$OUTPUT_FILE_NODE
 elif [[ $2 == "rate" ]]; then
     for ((i=5; i<=50; i += 5))
     do
-        eval "$COMMAND \"$SRC_FILE $CASE$1 $DATA_RATE$i $NUM_NODES$FIXED_NUM_NODES\"" >> $OUTPUT_FILE_RATE
+        eval "$COMMAND \"$SRC_FILE $CASE$1 $DATA_RATE$i $NUM_NODES$FIXED_NUM_NODES\"" | $PIPE_OUTPUT >> $OUTPUT_FILE_RATE
     done
     OUTPUT_FILE=$OUTPUT_FILE_RATE
 else
