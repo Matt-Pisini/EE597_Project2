@@ -49,7 +49,7 @@ else
     exit
 fi
 
-cp $OUTPUT_FILE $SRC_PATH
-cd $SRC_PATH
-echo "python $PY_SCRIPT $OUTPUT_FILE $2"
+# cp $OUTPUT_FILE $SRC_PATH
+# cd $SRC_PATH
+# echo "python $PY_SCRIPT $OUTPUT_FILE $2"
 # rm $OUTPUT_FILE
