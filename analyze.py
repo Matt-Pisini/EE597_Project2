@@ -2,7 +2,6 @@ import os
 import sys
 import matplotlib.pyplot as plt
 
-print(sys.argv)
 input_file_name, input_type = sys.argv[1:]
 input_file = open(input_file_name, 'r')
 input_file_lines = input_file.readlines()

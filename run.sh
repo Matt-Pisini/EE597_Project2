@@ -2,16 +2,16 @@
 # INPUTS TO SCRIPT
 # 1) input "A" or "B" meaning case A (CW = [1,1023]) or case B (CW = [63,127])
 # 2) input "node" or "rate" meaning vary nodes (E1) or vary rate (E2)
+# 3) input file_num for which # file to save output to
 
 SRC_FILE='sim2_v2.cc'
 DEST_PATH='/home/ee597/ns-3-allinone/ns-3-dev/scratch/'
 SRC_PATH=$PWD
 DEST_RUN='/home/ee597/ns-3-allinone/ns-3-dev/'
-OUTPUT_FILE_RATE='vary_rate.txt'
-OUTPUT_FILE_NODE='vary_node.txt'
+OUTPUT_FILE_RATE='vary_rate$1.txt'
+OUTPUT_FILE_NODE='vary_node$1.txt'
 HELP_OUTPUT=$'Input 1 = "A" or "B" meaning case A (CW = [1,1023]) or case B (CW = [63,127])
 Input 2 = "node" or "rate" meaning vary nodes (E1) or vary rate (E2)'
-PY_SCRIPT='analyze.py'
 
 # Command parameters
 FIXED_NUM_NODES='20'
@@ -33,13 +33,13 @@ if [[ $1 != "A" && $1 != "B" ]]; then
 fi
 
 if [[ $2 == "node" ]]; then
-    for ((i=2; i<=20; i+=2))
+    for ((i=2; i<=30; i++))
     do
         eval "$COMMAND \"$SRC_FILE $CASE$1 $DATA_RATE$FIXED_DATA_RATE $NUM_NODES$i\"" | $PIPE_OUTPUT >> $OUTPUT_FILE_NODE
     done
     OUTPUT_FILE=$OUTPUT_FILE_NODE
 elif [[ $2 == "rate" ]]; then
-    for ((i=5; i<=50; i += 5))
+    for ((i=1; i<=20; i++))
     do
         eval "$COMMAND \"$SRC_FILE $CASE$1 $DATA_RATE$i $NUM_NODES$FIXED_NUM_NODES\"" | $PIPE_OUTPUT >> $OUTPUT_FILE_RATE
     done
@@ -52,8 +52,10 @@ fi
 
 cp $OUTPUT_FILE $SRC_PATH
 rm $OUTPUT_FILE
+
+# Run Python script & SCP results
+# PY_SCRIPT='analyze.py'
 # cd $SRC_PATH
 # eval "python $PY_SCRIPT $OUTPUT_FILE $2"
 # echo "Finished running tasks"
-scp $SCP_COMMAND
-echo "s"
+# scp $SCP_COMMAND
