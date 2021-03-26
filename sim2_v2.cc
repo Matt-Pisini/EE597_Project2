@@ -25,7 +25,7 @@ int main(int argc, char *argv[]){
     char CASE = 'A';
     CommandLine cmd;
     cmd.AddValue("N", "Number of Tx Nodes/Devices", N);
-    cmd.AddValue("Data_Rate", "Data rate in units of Kb/s", Data_Rate);
+    cmd.AddValue("Data_Rate", "Data rate in units of Mb/s", Data_Rate);
     cmd.AddValue("CASE", "Case A Cwnd size 1-1023 Case B Cwnd size 63-127", CASE);
     cmd.Parse(argc, argv);
    
@@ -35,8 +35,8 @@ int main(int argc, char *argv[]){
 	maxCw = 127;
     }
 
-    //multiple Data rate by 1000 to convert to Kb/s
-    Data_Rate *= 1000;
+    //multiple Data rate by 1000000 to convert to Kb/s
+    Data_Rate *= 1000000;
 
     //Creating nodes for Tx and Rx
     NodeContainer wifiRxNode;
@@ -174,7 +174,7 @@ int main(int argc, char *argv[]){
     double totalRxBytes = sinkApp->GetTotalRx();
     float throughput = totalRxBytes*8.0/(endTrans - startTrans);
     throughput = throughput/1000;
-    std::cout<< throughput << "  "<< throughput/(double)N << "  "<< N << "  "<< Data_Rate/1000 <<std::endl;
+    std::cout<< throughput << "  "<< throughput/(double)N << "  "<< N << "  "<< Data_Rate/1000000 <<std::endl;
 
     Simulator::Destroy();
 
