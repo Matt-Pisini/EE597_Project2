@@ -3,7 +3,7 @@
 # 1) input "A" or "B" meaning case A (CW = [1,1023]) or case B (CW = [63,127])
 # 2) input "node" or "rate" meaning vary nodes (E1) or vary rate (E2)
 
-SRC_FILE='sim2.cc'
+SRC_FILE='sim2_v2.cc'
 DEST_PATH='/home/ee597/ns-3-allinone/ns-3-dev/scratch/'
 SRC_PATH=$PWD
 DEST_RUN='/home/ee597/ns-3-allinone/ns-3-dev/'
@@ -19,7 +19,7 @@ FIXED_DATA_RATE='10'
 DATA_RATE='--DATA_RATE='
 COMMAND='./waf --run'
 CASE='--CASE='
-PIPE_OUTPUT='tail -n 1'
+PIPE_OUTPUT='tail -n 1' #last line of stdout
 
 cp $SRC_FILE $DEST_PATH
 cd $DEST_RUN
@@ -51,5 +51,5 @@ fi
 cp $OUTPUT_FILE $SRC_PATH
 rm $OUTPUT_FILE
 cd $SRC_PATH
-echo "python $PY_SCRIPT $OUTPUT_FILE $2"
+eval "python $PY_SCRIPT $OUTPUT_FILE $2"
 echo "Finished running tasks"
