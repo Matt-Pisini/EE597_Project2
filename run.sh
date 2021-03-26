@@ -34,13 +34,13 @@ fi
 if [[ $2 == "node" ]]; then
     for ((i=5; i<=50; i += 5))
     do
-        eval "$COMMAND \"$SRC_FILE $CASE$1 $OUTPUT_FILE$i $DATA_RATE$FIXED_DATA_RATE $NUM_NODES$i\"" >> $OUTPUT_FILE_NODE
+        eval "$COMMAND \"$SRC_FILE $CASE$1 $DATA_RATE$FIXED_DATA_RATE $NUM_NODES$i\"" >> $OUTPUT_FILE_NODE
     done
     OUTPUT_FILE=$OUTPUT_FILE_NODE
 elif [[ $2 == "rate" ]]; then
     for ((i=5; i<=50; i += 5))
     do
-        eval "$COMMAND \"$SRC_FILE $CASE$1 $OUTPUT_FILE$i $DATA_RATE$i $NUM_NODES$FIXED_NUM_NODES\"" >> $OUTPUT_FILE_RATE
+        eval "$COMMAND \"$SRC_FILE $CASE$1 $DATA_RATE$i $NUM_NODES$FIXED_NUM_NODES\"" >> $OUTPUT_FILE_RATE
     done
     OUTPUT_FILE=$OUTPUT_FILE_RATE
 else
