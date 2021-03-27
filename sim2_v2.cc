@@ -45,7 +45,6 @@ int main(int argc, char *argv[]){
     wifiTxNodes.Create(N);
 
 
-//matt
     //Setup wifi channel
     //Do we need to set propagation delay? Might be according to the 
     //research paper as well.    
@@ -56,7 +55,6 @@ int main(int argc, char *argv[]){
     phy.SetChannel(channel.Create());
 
 
-//matt
     //Setup wifi Module
     //Need to look into wifi-mac.cc or wifi-phy.cc for configuration
     //parameters to change according to research paper.    
@@ -76,7 +74,6 @@ int main(int argc, char *argv[]){
     NetDeviceContainer txDevices;
     txDevices = wifi.Install(phy, mac, wifiTxNodes);
 
-//will
     //Set up backoff window size
     Ptr<NetDevice> dev = wifiRxNode.Get(0)->GetDevice(0);
     Ptr<WifiNetDevice> wifi_dev = DynamicCast<WifiNetDevice>(dev);
@@ -89,7 +86,6 @@ int main(int argc, char *argv[]){
     dca->SetMaxCw(maxCw);
 
 
-//will    
     //Set up Mobility and Position
     MobilityHelper mobility;
     mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
@@ -98,6 +94,7 @@ int main(int argc, char *argv[]){
     float rho = 1;
     float pi = 3.14159265;
     double theta = 0;
+    //Placing Transmiters in an equal distance circle around receiver
     for(uint32_t i = 0; i <N; i++){
         theta = i*2*pi/N;
         positionAlloc->Add(Vector(rho*cos(theta),rho*sin(theta),0.0));
@@ -121,11 +118,13 @@ int main(int argc, char *argv[]){
     //Helper class that is a simple IPv4 address generator.
     
     Ipv4AddressHelper address;
-
+    //Automatically assign IP addresses to the nodes 
     address.SetBase("10.1.1.0", "255.255.255.0");
     Ipv4InterfaceContainer wifiRxInterface = address.Assign(rxDevice);
     Ipv4InterfaceContainer wifiTxInterface = address.Assign(txDevices);
-
+    
+    //Setting each transmitter node to transmit at time .1 seconds from when simulation starts
+    //They will transmit to the receivers address and port until 9 seconds
     for(uint32_t i = 0; i < N; i++){
         OnOffHelper client ("ns3::UdpSocketFactory", Address(InetSocketAddress(wifiRxInterface.GetAddress(uint32_t(0)), uint32_t(9))));
         client.SetConstantRate(DataRate(Data_Rate), uint32_t(512));
@@ -138,20 +137,23 @@ int main(int argc, char *argv[]){
     //UdpServerHelper and UdpClientHelper are meant to help facilitate client-server communication for UDP
     PacketSinkHelper sink("ns3::UdpSocketFactory", Address(InetSocketAddress(wifiRxInterface.GetAddress(uint32_t(0)), uint32_t(9))));
     ApplicationContainer serverApp = sink.Install(wifiRxNode.Get(uint32_t(0)));
+    //The receiver starts at time  0 seconds of when the simulation starts
     serverApp.Start(Seconds(0.0));
 
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
 
     //run simulator and get throughput
+    //Using a flow monitor to be able to keep track of the data that is transmitted and evaluate throughput
     Ptr<PacketSink> sinkApp = DynamicCast<PacketSink> (serverApp.Get(uint32_t(0)));
     FlowMonitorHelper flowMon;
     Ptr<FlowMonitor> monitor = flowMon.InstallAll();
-
+    //Set simulator to run for 15 seconds so that all transmitters have time to transmit for their 9 seconds
     Simulator::Stop(Seconds(15.0));
     Simulator::Run();
-
+    
     monitor->CheckForLostPackets();
     Ptr<Ipv4FlowClassifier> classifier = DynamicCast<Ipv4FlowClassifier> (flowMon.GetClassifier());
+    //maping the data statistics of each flow to the flow id (transmitter to receiver)
     std::map<FlowId, FlowMonitor::FlowStats> stats = monitor->GetFlowStats();
     double endTrans = 9.0;
     double startTrans = 10.0;
@@ -159,6 +161,7 @@ int main(int argc, char *argv[]){
     //uint64_t totalTxBytes;
     //int j = 0;
 
+    //Checking the time of the first byte received from one of the transmitters and the time of the last byte received
     for (auto i : stats){
         if (endTrans < i.second.timeLastRxPacket.GetSeconds()){
             endTrans = i.second.timeLastRxPacket.GetSeconds();
@@ -170,12 +173,16 @@ int main(int argc, char *argv[]){
 	//totalTxBytes += arrTxBytes[j];
 	//j+=1;
     }
-
+    
+    //Total amount of bits received
     double totalRxBytes = sinkApp->GetTotalRx();
+    //throughput is bits/total time
     float throughput = totalRxBytes*8.0/(endTrans - startTrans);
-    throughput = throughput/1000;
-    std::cout<< throughput << " "<< throughput/(double)N << " "<< N << " "<< Data_Rate/1000000 <<std::endl;
-
+    throughput = throughput/1000;//calculated in Kbps
+    std::cout<<"Throughput: " <<throughput << "  Kbps"<< std::endl;
+    std::cout<<"Throughput-per-Node: "<<throughput/(double)N << " Kbps"<<std::endl;
+    std::cout<<"Number of Nodes: " <<N <<std::endl;
+    std::cout<< "Data Rate: "<< Data_Rate/1000000 <<" Mbps"<<std::endl;
     Simulator::Destroy();
 
     return 0;
