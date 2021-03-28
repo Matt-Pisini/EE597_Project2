@@ -7,6 +7,7 @@ FILE STRUCTURE:
     run.sh --> this script copies our Sim2_v2.cc file over to the correct NS-3 directory and then executes the program several times over a series of either changing node values or changing data rate values. These values are all written into a corresponding text file in the location of where you call run.sh
     multiple_run.sh --> this is a wrapper script that will call run.sh several times. producing many output files that we can then use to average our results for plotting.
 - analyze.py --> this is a Python script that will read in our output files and save the graphs.
+- wifi-phy.cc --> this is a source file from '/home/ee597/ns-3-allinone/ns-3-dev/src/wifi/model' that has been edited to have the same SIFS and slot time values as Bianchi's throughput analysis .
 
 RUNNING SIMULATION:
 - There are 3 main ways to run the program:
