@@ -179,7 +179,8 @@ int main(int argc, char *argv[]){
     //throughput is bits/total time
     float throughput = totalRxBytes*8.0/(endTrans - startTrans);
     throughput = throughput/1000;//calculated in Kbps
-    std::cout<<"Throughput: " <<throughput << "  Kbps"<<"  Throughput-per-Node: "<<throughput/(double)N << " Kbps"<<"  Number of Nodes: " <<N <<"  Data Rate: "<< Data_Rate/1000000 <<" Mbps"<<std::endl;
+    std::cout<<"Throughput (Kbps):\t"<<"Throughput-per-Node (Kbps)\t"<<"Number of Nodes\t\t"<<"Data Rate (Mbps)"<<std::endl; 
+    std::cout<<"\t"<<throughput<<"\t\t\t"<<throughput/(double)N << "\t\t\t\t"<<N <<"\t\t\t"<< Data_Rate/1000000 <<std::endl;
     Simulator::Destroy();
 
     return 0;
