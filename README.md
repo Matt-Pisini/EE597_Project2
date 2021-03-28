@@ -10,6 +10,7 @@ FILE STRUCTURE:
 
 RUNNING SIMULATION:
 - There are 3 main ways to run the program:
+- NOTE: multiple_run.sh and run.sh may take a while to finish runing depend on the number of trials that are ran and the number of nodes or data rate you are varying. You can edit line 35 in run.sh to change how you would like to increment the number of nodes and the range of how many nodes you wish to test. The default setting currently is to go from 2 to 4 and increment by 1. You may also edit the data rate by editing line 41 in run.sh and the default for this is also the same. We set the default low so computation time is not long for user testing the code. Even with these low settings it may take a few minutes.
     1. Call multiple_run.sh and the result will be several output files for different trials.
         - e.g. 'bash multiple_run.sh'
         - NOTE: Values in output files are printed in the following format:
