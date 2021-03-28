@@ -13,7 +13,7 @@ RUNNING SIMULATION:
     1. Call multiple_run.sh and the result will be several output files for different trials.
         - e.g. 'bash multiple_run.sh'
         - NOTE: Values in output files are printed in the following format:
-                - <throughput> <throughput-per-node> <num_nodes> <data_rate> 
+                    <throughput> <throughput-per-node> <num_nodes> <data_rate> 
     2. Call run.sh and there will be a single output file for either varying nodes or varying data rate.
         - e.g. 'bash run.sh <CASE> <node or rate> <file_num>'
             - CASE is either "A" or "B" meaning case A (CW = [1,1023]) or case B (CW = [63,127])
