@@ -19,6 +19,8 @@ RUNNING SIMULATION:
             - CASE is either "A" or "B" meaning case A (CW = [1,1023]) or case B (CW = [63,127])
             - 'node' will vary the nodes and 'rate' will vary the data rate
             - 'file_num' is an optional parameter. It is used when multiple_run.sh is called in order to differentiate output files.
+            - NOTE: Values in output files are printed in the following format:
+            -            *<Total_throughput> <throughput_per_node> <num_nodes> <data_rate>*
     3. Directly call './waf --run "sim2_v2.cc --CASE=<A or B> --N=<num_nodes> --Data_Rate=<data_rate>" ' 
         - CASE: choose "A" or "B" meaning case A (CW = [1,1023]) or case B (CW = [63,127])
         - N: number of nodes to run the simulation with
